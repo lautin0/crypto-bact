@@ -7,7 +7,7 @@ ganache-cli
 ```
 ### 2. Deploy smart contracts
 
-### 3. Copy contract ABI, paste into abi.js
+### 3. Copy contract ABI, paste into /components/Reusable/abi.js
 
 ### 4. Change contract address in /util/api.js
 ```javascript
