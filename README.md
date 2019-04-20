@@ -9,6 +9,8 @@ By default, it listens port 8545.
 
 ### 2. Deploy smart contracts
 
+Visit https://remix.ethereum.org/
+
 ### 3. Copy contract ABI, paste into /components/Reusable/abi.js
 ```javascript
 var abi = //<<paste the contract abi here>>
