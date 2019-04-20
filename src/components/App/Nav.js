@@ -24,7 +24,7 @@ class Nav extends React.Component {
         let bact = event.returnValues;
         // We can access this event's return values on the `event.returnValues` object:
         if (getCurrentAccount()) {
-          if (bact.attacker !== getCurrentAccount()) {
+          if (bact.attacker !== getCurrentAccount() && bact.defender === getCurrentAccount()) {
             console.log(getCurrentAccount() + ", " + bact.attacker)
             this.setState({
               data: bact,
