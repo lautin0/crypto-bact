@@ -6,8 +6,7 @@ import PlayerPreview from './PlayerPreview';
 function Profile(props) {
   let info = props.info;
   return (
-    <PlayerPreview username={info.name} avatar={info.name} info={info}>
-    </PlayerPreview>
+    <PlayerPreview username={info.name} avatar={info.name} info={info}></PlayerPreview>
   );
 }
 

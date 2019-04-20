@@ -2,12 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AlertModal from '../Reusable/AlertModal';
 
-var styles = {
-  hiddenLink: {
-    display: 'none'
-  }
-};
-
 class Nav extends React.Component {
 
   constructor(props) {
@@ -38,7 +32,7 @@ class Nav extends React.Component {
               type: "attack",
               linkTo: {}
             })
-          }          
+          }
         }
       }.bind(this)).on("error", console.error);
 

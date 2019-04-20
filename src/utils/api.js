@@ -2,6 +2,29 @@ import Web3 from 'web3';
 import abi from '../components/Reusable/abi'
 import AppConstants from '../utils/appconstants'
 
+/**
+ * Initialize contract instance
+ */
+export function initializeWeb3Provider(){
+  var web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+  var _address = '0x03dc1221fc914037176ce3e566c9e3cbc799b429';
+  var bContract = new web3.eth.Contract(abi, _address);
+  return {
+    web3: web3,
+    bContract: bContract
+  }
+}
+
+///#################################
+/// Contract Transaction Functions
+///#################################
+
+/**
+ * Attack Bacteria
+ * @param {contract instance} bContract 
+ * @param {player to battle} players 
+ * @param {sender (attacker) address} sender 
+ */
 export function battle(bContract, players, sender) {
   return bContract.methods.attack(players[0], players[1]).send({
     from: sender,
@@ -10,6 +33,13 @@ export function battle(bContract, players, sender) {
   })
 }
 
+/**
+ * Upgrade Ability
+ * @param {contract instance} bContract 
+ * @param {bacteria token} bactToken 
+ * @param {abilities string} abilities 
+ * @param {sender (upgrader) address} sender 
+ */
 export function updateAbility(bContract, bactToken, abilities, sender){
   return bContract.methods.changeAbility(bactToken, abilities).send({
     from: sender,
@@ -18,27 +48,66 @@ export function updateAbility(bContract, bactToken, abilities, sender){
   })
 }
 
-export function initializeWeb3Provider(){
-  var web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-  var _address = '0xbfc60ac4f5aa705c9a09948eb0b5fb84b556ebc7';
-  var bContract = new web3.eth.Contract(abi, _address);
-  return {
-    web3: web3,
-    bContract: bContract
-  }
+/**
+ * Force level up by paying ETHER
+ * @param {contract instance} bContract 
+ * @param {bacteria token} bactToken 
+ * @param {level up account address} sender 
+ */
+export function levelUp(bContract, bactToken, sender, web3){
+  return bContract.methods.levelUp(bactToken).send({
+    from: sender,
+    gasPrice: 3000000,
+    gas: 3000000,
+    value: web3.utils.toWei("0.001")
+  });
+}
+
+/**
+ * Create new bacteria
+ * @param {contract instance} bContract 
+ * @param {bacteria name} name 
+ * @param {creator address} sender 
+ */
+export function createBacteria(bContract,name,sender){
+  bContract.methods.createRandomBacteria(name).send({
+    from: sender,
+    gasPrice: 3000000,
+    gas: 3000000
+  })
+}
+
+/**
+ * 
+ * @param {contract instance} bContract 
+ * @param {new level-up fee} newFee 
+ * @param {contract deployer address} sender 
+ */
+export function onlyOwnerSetLevelUpFee(bContract, newFee, sender){
+  return bContract.methods.setLevelUpFee(newFee).send({
+    from: sender,
+    gasPrice: 3000000,
+    gas: 3000000
+  });
+}
+
+///#################################
+/// Contract View Functions
+///#################################
+
+export async function isOwner(bContract, sender){
+  return bContract.methods.isOwner().call({
+    from: sender
+  });
+}
+
+export function getLevelUpFee(bContract){
+  return bContract.methods.getLevelUpFee().call()
 }
 
 export async function getAccounts(web3){
   var accounts = await web3.eth.getAccounts().then();
   return accounts;
-}
-
-export function createBacteria(bContract,name,acc){
-  bContract.methods.createRandomBacteria(name).send({
-    from: acc,
-    gasPrice: 3000000,
-    gas: 3000000
-  })
 }
 
 export async function getBacteriaByTokenId(bContract, token){
@@ -97,6 +166,11 @@ export function getNumOfBacteriaList(bContract,num){
       return bactArray;
     });
 }
+
+
+///#################################
+/// Util Functions
+///#################################
 
 export function parseAbility(ability) {
   let lethalityIdx = ability.indexOf("@@LET");

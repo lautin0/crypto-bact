@@ -165,6 +165,20 @@ var abi = [
 	},
 	{
 		"constant": true,
+		"inputs": [],
+		"name": "getLevelUpFee",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"name": "_owner",
@@ -604,6 +618,30 @@ var abi = [
 			}
 		],
 		"name": "UpdateBacteriaEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "level",
+				"type": "uint256"
+			}
+		],
+		"name": "LevelUpBacteriaEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "fee",
+				"type": "uint256"
+			}
+		],
+		"name": "levelUpFeeUpdatedEvent",
 		"type": "event"
 	},
 	{

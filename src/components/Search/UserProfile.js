@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { updateAbility, getBacteriaTokenIdByAddress, parseAbility } from "../../utils/api";
+import { updateAbility, getBacteriaTokenIdByAddress, parseAbility, levelUp } from "../../utils/api";
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class UserProfile extends React.Component {
     };
 
     this.onLevelUpClick = this.onLevelUpClick.bind(this);
+    this.forceLevelUp = this.forceLevelUp.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +43,18 @@ class UserProfile extends React.Component {
       resistanceLevel: resistanceLevel,
       upgradeDisable: upgradeDisable
     })
+  }
+
+  async forceLevelUp(){
+    let { getCurrentAccount, bContract, web3 } = this.props;
+    let tokenId = await getBacteriaTokenIdByAddress(bContract, getCurrentAccount());
+    levelUp(bContract, tokenId, getCurrentAccount(), web3)
+    .then(function(tran){
+      this.setState({
+        level: tran.events.LevelUpBacteriaEvent.returnValues[0],
+        upgradeDisable: false
+      })
+    }.bind(this));
   }
 
   async onLevelUpClick(type) {
@@ -138,6 +151,11 @@ class UserProfile extends React.Component {
           <p>
             <Button disabled={this.state.upgradeDisable} variant="success" onClick={() => this.onLevelUpClick("RES")}>
               <i className="fa fa-shield-alt" aria-hidden="true" /> Resistance : {this.state.resistanceLevel}
+            </Button>
+          </p>
+          <p>
+            <Button variant="outline-warning" onClick={this.forceLevelUp}>
+              <i className="fa fa-coins" aria-hidden="true" /> +1lv.(Ξ0.001)
             </Button>
           </p>
         </div>

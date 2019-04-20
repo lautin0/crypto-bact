@@ -116,7 +116,7 @@ class Search extends React.Component {
 
         <div className="profile">
           {loading ? <Loading speed={250} /> : ' '}
-          {(bacteria && bacteria.dna != 0) && <UserProfile profile={bacteria} bContract={this.props.bContract} getCurrentAccount={this.props.getCurrentAccount} />}
+          {(bacteria && bacteria.dna != 0) && <UserProfile profile={bacteria} bContract={this.props.bContract} web3={this.props.web3} getCurrentAccount={this.props.getCurrentAccount} />}
         </div>
 
         <div className="row" style={{display: (this.state.bacteria == null ? '' : 'none')}}>

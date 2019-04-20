@@ -25,7 +25,8 @@ class App extends React.Component {
       bContract: null,
       currentAccount: null,
       allAccounts: null,
-      loadingComplete: false
+      loadingComplete: false,
+      levelUpFee: 0
     }
   }
 
@@ -61,13 +62,12 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" render={(props) => <Home {...props} setCurrentAccount={this.setCurrentAccount}
               currentAccount={this.state.currentAccount} web3={this.state.web3} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route exact path="/results" Component={Results} />
             <Route exact path="/battle" render={(props) => <Battle {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
             <Route exact path="/battle/results" render={(props) => <Results {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
             <Route exact path="/battle/:token" render={(props) => <Battle {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
             <Route path="/popular" render={(props) => <Popular {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
             <Route path="/lab" render={(props) => <Search {...props} bContract={this.state.bContract}
-              getCurrentAccount={this.getCurrentAccount} />} />
+              getCurrentAccount={this.getCurrentAccount} web3={this.state.web3} />} />
             <Route
               render={function () {
                 return <p>Not Found</p>;
