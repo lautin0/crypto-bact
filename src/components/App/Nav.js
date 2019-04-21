@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AlertModal from '../Reusable/AlertModal';
-import { isOwner } from '../../utils/api';
 
 class Nav extends React.Component {
 
@@ -13,7 +12,6 @@ class Nav extends React.Component {
       data: null,
       type: null,
       linkTo: null,
-      isOwner: false
     }
   }
 
@@ -50,15 +48,6 @@ class Nav extends React.Component {
       }.bind(this)).on("error", console.error);
   }
 
-  componentDidUpdate() {
-    let bContract = window.bContract
-    isOwner(bContract, this.props.currentAccount).then((result) => {
-      this.setState({
-        isOwner: result
-      })
-    })
-  }
-
   render() {
     return (
       <div>
@@ -85,7 +74,7 @@ class Nav extends React.Component {
             </NavLink>
           </li>
           <li>
-            {(this.state.isOwner && this.props.currentAccount) && <NavLink activeClassName="active" to="/admin">
+            {this.props.isOwner && <NavLink activeClassName="active" to="/admin">
               Admin
             </NavLink>}
           </li>

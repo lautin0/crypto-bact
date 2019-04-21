@@ -53,24 +53,6 @@ var abi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_bacteriaId",
-				"type": "uint256"
-			},
-			{
-				"name": "_kittyId",
-				"type": "uint256"
-			}
-		],
-		"name": "feedOnKitty",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
 				"name": "_name",
 				"type": "string"
 			}
@@ -107,20 +89,6 @@ var abi = [
 		"constant": false,
 		"inputs": [],
 		"name": "withdraw",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "setKittyContractAddress",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -286,25 +254,6 @@ var abi = [
 				"name": "",
 				"type": "uint16"
 			},
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "abilityMap",
-		"outputs": [
 			{
 				"name": "",
 				"type": "string"

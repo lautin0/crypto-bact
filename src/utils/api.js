@@ -7,7 +7,7 @@ import AppConstants from '../utils/appconstants'
  */
 export function initializeWeb3Provider(){
   var web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-  var _address = '0x231b7373dd63fa9175492095ed5a802647debb95';
+  var _address = '0x4c4a76f5fb6bc81945e23fc2338890ba7ad677dd';
   var bContract = new web3.eth.Contract(abi, _address);
   return {
     web3: web3,

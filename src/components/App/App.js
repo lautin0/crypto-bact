@@ -7,7 +7,7 @@ import Results from '../Battle/Results';
 import Popular from '../Popular/Popular';
 import Search from '../Search/Search';
 import Admin from '../Admin/Admin'
-import { initializeWeb3Provider, getLevelUpFee } from '../../utils/api';
+import { initializeWeb3Provider, getLevelUpFee, isOwner } from '../../utils/api';
 
 class App extends React.Component {
   constructor(props) {
@@ -21,12 +21,11 @@ class App extends React.Component {
 
     // Set the state directly. Use props if necessary.
     this.state = {
-      web3: null,
-      bContract: null,
       currentAccount: null,
       allAccounts: null,
       loadingComplete: false,
-      levelUpFee: 0
+      levelUpFee: 0,
+      isOwner: false
     }
   }
 
@@ -40,6 +39,11 @@ class App extends React.Component {
   setCurrentAccount(account) {
     this.setState({
       currentAccount: account
+    })
+    isOwner(window.bContract, account).then((result) => {
+      this.setState({
+        isOwner: result
+      })
     })
   }
 
@@ -70,7 +74,7 @@ class App extends React.Component {
     return (
       <Router>
         <div className="container">
-          <Nav currentAccount={this.state.currentAccount} getCurrentAccount={this.getCurrentAccount} />
+          <Nav isOwner={this.state.isOwner} getCurrentAccount={this.getCurrentAccount} />
           <Switch>
             <Route exact path="/" render={(props) => <Home {...props} setCurrentAccount={this.setCurrentAccount}
               currentAccount={this.state.currentAccount} getCurrentAccount={this.getCurrentAccount} />} />
