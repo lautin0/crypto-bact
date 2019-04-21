@@ -1,5 +1,4 @@
 import React from 'react';
-//import ReactRouter from 'react-router-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
@@ -7,7 +6,8 @@ import Battle from '../Battle/Battle';
 import Results from '../Battle/Results';
 import Popular from '../Popular/Popular';
 import Search from '../Search/Search';
-import { initializeWeb3Provider } from '../../utils/api';
+import Admin from '../Admin/Admin'
+import { initializeWeb3Provider, getLevelUpFee } from '../../utils/api';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class App extends React.Component {
     this.setCurrentAccount = this.setCurrentAccount.bind(this);
     this.setAccounts = this.setAccounts.bind(this);
     this.getCurrentAccount = this.getCurrentAccount.bind(this);
-    this.getBacteriaContract = this.getBacteriaContract.bind(this);
+    this.setLevelUpFee = this.setLevelUpFee.bind(this);
 
     // Set the state directly. Use props if necessary.
     this.state = {
@@ -28,6 +28,13 @@ class App extends React.Component {
       loadingComplete: false,
       levelUpFee: 0
     }
+  }
+
+  setLevelUpFee(fee){
+    this.setState({
+      levelUpFee: fee
+    })
+    window.levelUpFee = fee;
   }
 
   setCurrentAccount(account) {
@@ -46,28 +53,34 @@ class App extends React.Component {
     return this.state.currentAccount;
   }
 
-  getBacteriaContract() {
-    return this.state.bContract;
-  }
-
-  componentDidMount() {
-    this.setState({ ...initializeWeb3Provider() });
+  componentWillMount() {
+    let { web3, bContract } = initializeWeb3Provider()
+    window.bContract = bContract;
+    window.web3 = web3;
+    getLevelUpFee(bContract).then((result) => { 
+      let eth = web3.utils.fromWei(result)
+      window.levelUpFee = eth
+      this.setState({
+        levelUpFee: eth
+      })
+     });
   }
 
   render() {
     return (
       <Router>
         <div className="container">
-          <Nav bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />
+          <Nav currentAccount={this.state.currentAccount} getCurrentAccount={this.getCurrentAccount} />
           <Switch>
             <Route exact path="/" render={(props) => <Home {...props} setCurrentAccount={this.setCurrentAccount}
-              currentAccount={this.state.currentAccount} web3={this.state.web3} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route exact path="/battle" render={(props) => <Battle {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route exact path="/battle/results" render={(props) => <Results {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route exact path="/battle/:token" render={(props) => <Battle {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route path="/popular" render={(props) => <Popular {...props} bContract={this.state.bContract} getCurrentAccount={this.getCurrentAccount} />} />
-            <Route path="/lab" render={(props) => <Search {...props} bContract={this.state.bContract}
-              getCurrentAccount={this.getCurrentAccount} web3={this.state.web3} />} />
+              currentAccount={this.state.currentAccount} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route exact path="/battle" render={(props) => <Battle {...props} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route exact path="/battle/results" render={(props) => <Results {...props} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route exact path="/battle/:token" render={(props) => <Battle {...props} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route path="/popular" render={(props) => <Popular {...props} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route path="/lab" render={(props) => <Search {...props} getCurrentAccount={this.getCurrentAccount} />} />
+            <Route path="/admin" render={(props) => <Admin {...props} getCurrentAccount={this.getCurrentAccount} 
+            levelUpFee={this.state.levelUpFee} setLevelUpFee={this.setLevelUpFee}></Admin>}  ></Route>
             <Route
               render={function () {
                 return <p>Not Found</p>;

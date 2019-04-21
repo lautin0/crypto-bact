@@ -27,7 +27,7 @@ class Popular extends React.Component {
   }
 
   async fetchBacterias(){
-    let{ bContract } = this.props;
+    let bContract = window.bContract;
     let count = await getAllBacteriasCount(bContract);
     getNumOfBacteriaList(bContract, count).then(function(bacterias){
       this.setState(function(){
@@ -38,7 +38,7 @@ class Popular extends React.Component {
     let { getCurrentAccount } = this.props;
     let account = getCurrentAccount();
     if(account){
-      let tokenId = await getBacteriaTokenIdByAddress(this.props.bContract, account);
+      let tokenId = await getBacteriaTokenIdByAddress(bContract, account);
       this.setState({
         currentTokenId: tokenId
       })

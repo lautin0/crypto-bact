@@ -44,7 +44,8 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
-    let { bContract, getCurrentAccount} = this.props
+    let { getCurrentAccount} = this.props
+    let bContract = window.bContract;
     animate.from(this.label, 0.2, { y: -200, delay: 0.1 });
     animate.from(this.input, 0.3, {
       x: -1200,
@@ -70,7 +71,8 @@ class Search extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    let { bContract, getCurrentAccount} = this.props
+    let { getCurrentAccount} = this.props
+    let bContract = window.bContract;
     this.setState({
       user: null,
       userInfo: '',
@@ -116,7 +118,7 @@ class Search extends React.Component {
 
         <div className="profile">
           {loading ? <Loading speed={250} /> : ' '}
-          {(bacteria && bacteria.dna != 0) && <UserProfile profile={bacteria} bContract={this.props.bContract} web3={this.props.web3} getCurrentAccount={this.props.getCurrentAccount} />}
+          {(bacteria && bacteria.dna != 0) && <UserProfile profile={bacteria} getCurrentAccount={this.props.getCurrentAccount} />}
         </div>
 
         <div className="row" style={{display: (this.state.bacteria == null ? '' : 'none')}}>
@@ -131,7 +133,6 @@ Search.propTypes = {
   user: PropTypes.string,
   userInfo: PropTypes.object,
   userRepos: PropTypes.object,
-  bContract: PropTypes.object.isRequired
 };
 
 export default withRouter(Search);

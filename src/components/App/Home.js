@@ -28,7 +28,7 @@ class Home extends React.Component {
   }
 
   async fetchAllAccounts(){
-    var accounts = await getAccounts(this.props.web3)
+    var accounts = await getAccounts(window.web3)
     this.setState({
       allAccounts: accounts
     })

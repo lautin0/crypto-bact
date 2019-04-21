@@ -59,13 +59,14 @@ class Battle extends React.Component {
 
   async handleSubmit(id, token) {
     let { getCurrentAccount } = this.props;
+    let bContract = window.bContract;
     let bact;
     if(token == ''){
-      let tokenId = await getBacteriaTokenIdByAddress(this.props.bContract, getCurrentAccount());    
-      bact = await getBacteriaByTokenId(this.props.bContract, tokenId)
+      let tokenId = await getBacteriaTokenIdByAddress(bContract, getCurrentAccount());    
+      bact = await getBacteriaByTokenId(bContract, tokenId)
       bact.token = tokenId;
     }else{
-      bact = await getBacteriaByTokenId(this.props.bContract, token)
+      bact = await getBacteriaByTokenId(bContract, token)
       bact.token = token;
     }
 

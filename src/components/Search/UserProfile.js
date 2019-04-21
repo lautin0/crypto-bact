@@ -46,7 +46,9 @@ class UserProfile extends React.Component {
   }
 
   async forceLevelUp(){
-    let { getCurrentAccount, bContract, web3 } = this.props;
+    let { getCurrentAccount } = this.props;
+    let web3 = window.web3;
+    let bContract = window.bContract;
     let tokenId = await getBacteriaTokenIdByAddress(bContract, getCurrentAccount());
     levelUp(bContract, tokenId, getCurrentAccount(), web3)
     .then(function(tran){
@@ -58,7 +60,8 @@ class UserProfile extends React.Component {
   }
 
   async onLevelUpClick(type) {
-    let { getCurrentAccount, bContract } = this.props;
+    let { getCurrentAccount } = this.props;
+    let bContract = window.bContract;
     let tokenId = await getBacteriaTokenIdByAddress(bContract, getCurrentAccount());
     let abilities
     if (type == "LET")
@@ -155,7 +158,7 @@ class UserProfile extends React.Component {
           </p>
           <p>
             <Button variant="outline-warning" onClick={this.forceLevelUp}>
-              <i className="fa fa-coins" aria-hidden="true" /> +1lv.(Ξ0.001)
+              <i className="fa fa-coins" aria-hidden="true" /> +1lv.(Ξ{window.levelUpFee})
             </Button>
           </p>
         </div>

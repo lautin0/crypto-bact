@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AlertModal from '../Reusable/AlertModal';
+import { isOwner } from '../../utils/api';
 
 class Nav extends React.Component {
 
@@ -11,21 +12,21 @@ class Nav extends React.Component {
       show: false,
       data: null,
       type: null,
-      linkTo: null
+      linkTo: null,
+      isOwner: false
     }
   }
 
-  render() {
-    let { bContract, getCurrentAccount } = this.props
-
-    bContract && bContract.events
+  componentWillMount() {
+    let bContract = window.bContract;
+    let { getCurrentAccount } = this.props;
+    bContract.events
       .BacteriaAttackEvent({ filter: { defender: getCurrentAccount() } })
       .on("data", function (event) {
         let bact = event.returnValues;
         // We can access this event's return values on the `event.returnValues` object:
         if (getCurrentAccount()) {
           if (bact.attacker !== getCurrentAccount() && bact.defender === getCurrentAccount()) {
-            console.log(getCurrentAccount() + ", " + bact.attacker)
             this.setState({
               data: bact,
               show: true,
@@ -37,7 +38,7 @@ class Nav extends React.Component {
       }.bind(this)).on("error", console.error);
 
     //subscribe event
-    bContract && bContract.events.NewBacteria()
+    bContract.events.NewBacteria()
       .on("data", function (event) {
         let bact = event.returnValues;
         // We can access this event's return values on the `event.returnValues` object:
@@ -47,7 +48,18 @@ class Nav extends React.Component {
           type: "create"
         })
       }.bind(this)).on("error", console.error);
+  }
 
+  componentDidUpdate() {
+    let bContract = window.bContract
+    isOwner(bContract, this.props.currentAccount).then((result) => {
+      this.setState({
+        isOwner: result
+      })
+    })
+  }
+
+  render() {
     return (
       <div>
         <AlertModal type={this.state.type} data={this.state.data} show={this.state.show}></AlertModal>
@@ -71,6 +83,11 @@ class Nav extends React.Component {
             <NavLink activeClassName="active" to="/lab">
               Lab
             </NavLink>
+          </li>
+          <li>
+            {(this.state.isOwner && this.props.currentAccount) && <NavLink activeClassName="active" to="/admin">
+              Admin
+            </NavLink>}
           </li>
         </ul>
       </div>

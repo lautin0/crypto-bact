@@ -21,13 +21,14 @@ class Results extends React.Component {
     let players;
     players = queryString.parse(this.props.location.search);
     let { getCurrentAccount } = this.props;
-    battle(this.props.bContract, [players.playerOneToken, players.playerTwoToken], getCurrentAccount())
+    let bContract = window.bContract;
+    battle(bContract, [players.playerOneToken, players.playerTwoToken], getCurrentAccount())
       .then(function (tran) {
         let atkToken = tran.events.BacteriaReturnEvent.returnValues[0]
         let defToken = tran.events.BacteriaReturnEvent.returnValues[1]
         let result = tran.events.BacteriaReturnEvent.returnValues[2]
-        Promise.all([getBacteriaByTokenId(this.props.bContract, atkToken),
-        getBacteriaByTokenId(this.props.bContract, defToken)]).then(function (values) {
+        Promise.all([getBacteriaByTokenId(bContract, atkToken),
+        getBacteriaByTokenId(bContract, defToken)]).then(function (values) {
           let winnerBact;
           let loserBact;
           winnerBact = result ? values[0] : values[1]

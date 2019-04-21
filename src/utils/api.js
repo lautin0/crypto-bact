@@ -7,7 +7,7 @@ import AppConstants from '../utils/appconstants'
  */
 export function initializeWeb3Provider(){
   var web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-  var _address = '0x4f2ce06256e6cdd3eda7688e8c8f20bf51028b97';
+  var _address = '0x231b7373dd63fa9175492095ed5a802647debb95';
   var bContract = new web3.eth.Contract(abi, _address);
   return {
     web3: web3,
@@ -59,7 +59,7 @@ export function levelUp(bContract, bactToken, sender, web3){
     from: sender,
     gasPrice: 3000000,
     gas: 3000000,
-    value: web3.utils.toWei("0.001")
+    value: web3.utils.toWei(window.levelUpFee)
   });
 }
 
