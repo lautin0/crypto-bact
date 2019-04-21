@@ -31,9 +31,9 @@ contract BacteriaAttack is BacteriaHelper {
     } else {
       myBacteria.lossCount = myBacteria.lossCount.add(1);
       enemyBacteria.winCount = enemyBacteria.winCount.add(1);
-      _triggerCooldown(myBacteria);
       wl = "win";
     }
+    _triggerCooldown(myBacteria);
     emit BacteriaAttackEvent(bacteriaToOwner[_bacteriaId], myBacteria.name, bacteriaToOwner[_targetId], enemyBacteria.name, wl);
     emit BacteriaReturnEvent(_bacteriaId, _targetId, wlBool);
     return (_bacteriaId, _targetId, wlBool);

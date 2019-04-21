@@ -5,14 +5,15 @@ import "./bacteriafeeding.sol";
 contract BacteriaHelper is BacteriaFeeding {
 
   uint levelUpFee = 0.001 ether;
-  mapping (uint => string) public abilityMap;
-  
+
   modifier aboveLevel(uint _level, uint _bacteriaId) {
     require(bacterias[_bacteriaId].level >= _level);
     _;
   }
   
-  event UpdateBacteriaEvent(string name, uint dna, uint32 level, uint32 readyTime, uint16 winCount, uint16 lossCount, string abilities);
+  event UpdateBacteriaEvent(string abilities);
+  event LevelUpBacteriaEvent(uint level);
+  event levelUpFeeUpdatedEvent(uint fee);
 
   function withdraw() external onlyOwner {
     address payable _owner = owner();
@@ -21,11 +22,17 @@ contract BacteriaHelper is BacteriaFeeding {
 
   function setLevelUpFee(uint _fee) external onlyOwner {
     levelUpFee = _fee;
+    emit levelUpFeeUpdatedEvent(levelUpFee);
+  }
+  
+  function getLevelUpFee() external view returns (uint) {
+    return levelUpFee;
   }
 
   function levelUp(uint _bacteriaId) external payable {
     require(msg.value == levelUpFee);
     bacterias[_bacteriaId].level = bacterias[_bacteriaId].level.add(1);
+    emit LevelUpBacteriaEvent(bacterias[_bacteriaId].level);
   }
 
   function changeName(uint _bacteriaId, string calldata _newName) external aboveLevel(2, _bacteriaId) onlyOwnerOf(_bacteriaId) {
@@ -34,15 +41,7 @@ contract BacteriaHelper is BacteriaFeeding {
   
   function changeAbility(uint _bacteriaId, string calldata _newAbility) external onlyOwnerOf(_bacteriaId) {
     bacterias[_bacteriaId].abilities = _newAbility;
-    emit UpdateBacteriaEvent(
-      bacterias[_bacteriaId].name,
-      bacterias[_bacteriaId].dna,
-      bacterias[_bacteriaId].level,
-      bacterias[_bacteriaId].readyTime,
-      bacterias[_bacteriaId].winCount,
-      bacterias[_bacteriaId].lossCount,
-      bacterias[_bacteriaId].abilities
-    );
+    emit UpdateBacteriaEvent(bacterias[_bacteriaId].abilities);
   }
 
   function changeDna(uint _bacteriaId, uint _newDna) external aboveLevel(20, _bacteriaId) onlyOwnerOf(_bacteriaId) {
